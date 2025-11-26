@@ -58,5 +58,12 @@ namespace Todo.NoteController
             await _service.DeleteAsync(id);
             return NoContent();
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromQuery] Guid id, [FromBody] string newText)
+        {
+            await _service.UpdateAsync(id, newText);
+            return NoContent();
+        }
     }
 }
