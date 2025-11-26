@@ -24,14 +24,14 @@ public class NoteRepository: INoteRepository
 
     public async Task CreateAsync(Note note, CancellationToken cancellationToken = default)
     {
-        note.CreatedAt = DateTime.UtcNow;
+        
         await _context.Notes.AddAsync(note, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateAsync(Note note, CancellationToken cancellationToken = default)
     {
-        note.UpdatedAt = DateTime.UtcNow;
+        
         _context.Notes.Update(note);
         await _context.SaveChangesAsync(cancellationToken);
     }
