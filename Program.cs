@@ -12,6 +12,6 @@ builder.Services.AddAutoMapper(typeof(NoteProfile));
 var app = builder.Build();
 
 
-
+app.MapControllers();
 app.Run();
 
