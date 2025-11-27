@@ -47,7 +47,7 @@ namespace Todo.NoteController
         }
 
         [HttpGet("/{id}")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute, Required] Guid id)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace Todo.NoteController
         }
 
         [HttpDelete("/{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute, Required] Guid id)
         {
             try
             {
@@ -89,7 +89,9 @@ namespace Todo.NoteController
         }
 
         [HttpPatch("/{id}")]
-        public async Task<IActionResult> Update([FromRoute, Required] Guid id, [FromBody] CreateNoteRequest request)
+        public async Task<IActionResult> Update(
+            [FromRoute, Required] Guid id, 
+            [FromBody, Required] CreateNoteRequest request)
         {
             try
             {
