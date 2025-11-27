@@ -1,4 +1,5 @@
 ﻿using Todo.Domain;
+using Todo.Models.Request;
 
 namespace Todo.Services;
 
@@ -12,6 +13,6 @@ public interface INoteService
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(Guid id, string newText, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Guid id, CreateNoteRequest request, CancellationToken cancellationToken = default);
 
 }

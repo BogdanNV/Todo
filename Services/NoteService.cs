@@ -1,4 +1,5 @@
 ﻿using Todo.Domain;
+using Todo.Models.Request;
 using Todo.Repositories;
 
 namespace Todo.Services;
@@ -31,19 +32,36 @@ public class NoteService: INoteService
 
     public async Task<Note?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _repository.GetByIdAsync(id, cancellationToken);
+        var note = await _repository.GetByIdAsync(id, cancellationToken);
+        if(note is null)
+        {
+            throw new Exception("Note not found");
+        }
+        return note;
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var note = await _repository.GetByIdAsync(id, cancellationToken);
+
+        if(note is null)
+        {
+            throw new Exception("Note not found");
+        }
+
         await _repository.DeleteAsync(note, cancellationToken);
     }
 
-    public async Task UpdateAsync(Guid id, string newText, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Guid id, CreateNoteRequest request, CancellationToken cancellationToken = default)
     {
         var note = await _repository.GetByIdAsync(id, cancellationToken);
-        note.Title = newText;
+
+        if(note is null)
+        {
+            throw new Exception("Note not found");
+        }
+
+        note.Title = request.Title;
         note.UpdatedAt = DateTime.UtcNow;
 
         await _repository.UpdateAsync(note, cancellationToken);

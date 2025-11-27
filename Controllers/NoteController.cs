@@ -44,26 +44,61 @@ namespace Todo.NoteController
         [HttpGet]
         public async Task<IActionResult> GetById([FromQuery] Guid id)
         {
-            var result = await _service.GetByIdAsync(id);
-            return Ok(new ApiResponse<Note>
+            try
             {
-                Data = result,
-                Message = "Done"
-            });
+                var result = await _service.GetByIdAsync(id);
+                return Ok(new ApiResponse<Note>
+                {
+                    Data = result,
+                    Message = "Done"
+                });
+            }
+            catch (Exception e)
+            {
+                
+                return BadRequest(new ErrorResponse
+                {
+                    Message = e.Message
+                });
+            }
+            
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete([FromQuery] Guid id)
         {
-            await _service.DeleteAsync(id);
-            return NoContent();
+            try
+            {
+                await _service.DeleteAsync(id);
+                return NoContent(); 
+            }
+            catch (Exception e)
+            {
+                
+                return BadRequest(new ErrorResponse
+                {
+                    Message = e.Message
+                });
+            }
+            
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromQuery] Guid id, [FromBody] string newText)
+        public async Task<IActionResult> Update([FromQuery] Guid id, [FromBody] CreateNoteRequest request)
         {
-            await _service.UpdateAsync(id, newText);
-            return NoContent();
+            try
+            {
+                await _service.UpdateAsync(id, request);
+                return NoContent(); 
+            }
+            catch (Exception e)
+            {
+                
+                return BadRequest(new ErrorResponse
+                {
+                    Message = e.Message
+                });
+            }
         }
     }
 }
