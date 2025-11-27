@@ -12,15 +12,10 @@ public class NoteService: INoteService
         _repository = repository;
     }
 
-    public async Task CreateAsync(string title, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(Note note, CancellationToken cancellationToken = default)
     {
-        var note = new Note
-        {
-            Id = Guid.NewGuid(),
-            Title = title,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+        note.CreatedAt = DateTime.UtcNow;
+        note.UpdatedAt = DateTime.UtcNow;
 
         await _repository.CreateAsync(note, cancellationToken);
     }
@@ -52,16 +47,8 @@ public class NoteService: INoteService
         await _repository.DeleteAsync(note, cancellationToken);
     }
 
-    public async Task UpdateAsync(Guid id, CreateNoteRequest request, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Note note, CancellationToken cancellationToken = default)
     {
-        var note = await _repository.GetByIdAsync(id, cancellationToken);
-
-        if(note is null)
-        {
-            throw new Exception("Note not found");
-        }
-
-        note.Title = request.Title;
         note.UpdatedAt = DateTime.UtcNow;
 
         await _repository.UpdateAsync(note, cancellationToken);

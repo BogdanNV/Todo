@@ -5,7 +5,7 @@ namespace Todo.Services;
 
 public interface INoteService
 {
-    Task CreateAsync(string title, CancellationToken cancellationToken = default);
+    Task CreateAsync(Note note, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Note>> GetAllAsync(CancellationToken cancellationToken = default);
 
@@ -13,6 +13,6 @@ public interface INoteService
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(Guid id, CreateNoteRequest request, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Note note, CancellationToken cancellationToken = default);
 
 }

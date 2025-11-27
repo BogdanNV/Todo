@@ -32,8 +32,12 @@ public class NoteRepository: INoteRepository
     public async Task UpdateAsync(Note note, CancellationToken cancellationToken = default)
     {
         
-        _context.Notes.Update(note);
-        await _context.SaveChangesAsync(cancellationToken);
+        var existingNote = await _context.Notes.FindAsync(note.Id);
+        if (existingNote != null)
+        {
+            _context.Entry(existingNote).CurrentValues.SetValues(note);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 
     public async Task DeleteAsync(Note note, CancellationToken cancellationToken = default)

@@ -3,6 +3,8 @@ using Todo.Services;
 using Todo.Models.Request;
 using Todo.Models.Response;
 using Todo.Domain;
+using AutoMapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace Todo.NoteController
 {
@@ -11,9 +13,11 @@ namespace Todo.NoteController
     public class NoteController: ControllerBase
     {
         readonly INoteService _service;
-        public NoteController(INoteService noteService)
+        readonly IMapper _mapper;
+        public NoteController(INoteService noteService, IMapper mapper)
         {
             _service = noteService;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -26,11 +30,12 @@ namespace Todo.NoteController
                     Message = "Model is not valid."
                 });
             }
-            await _service.CreateAsync(request.Title);
+            var note = _mapper.Map<Note>(request);
+            await _service.CreateAsync(note);
             return NoContent();
         }
 
-        [HttpGet("/notes")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetAllAsync();
@@ -41,8 +46,8 @@ namespace Todo.NoteController
             });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetById([FromQuery] Guid id)
+        [HttpGet("/{id}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             try
             {
@@ -64,8 +69,8 @@ namespace Todo.NoteController
             
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] Guid id)
+        [HttpDelete("/{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             try
             {
@@ -83,12 +88,14 @@ namespace Todo.NoteController
             
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromQuery] Guid id, [FromBody] CreateNoteRequest request)
+        [HttpPatch("/{id}")]
+        public async Task<IActionResult> Update([FromRoute, Required] Guid id, [FromBody] CreateNoteRequest request)
         {
             try
             {
-                await _service.UpdateAsync(id, request);
+                var note = _mapper.Map<Note>(request);
+                note.Id = id;
+                await _service.UpdateAsync(note);
                 return NoContent(); 
             }
             catch (Exception e)
