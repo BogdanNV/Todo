@@ -35,8 +35,13 @@ public class NoteRepository: INoteRepository
         var existingNote = await _context.Notes.FindAsync(note.Id);
         if (existingNote != null)
         {
-            _context.Entry(existingNote).CurrentValues.SetValues(note);
+            existingNote.Title = note.Title;
+            existingNote.UpdatedAt = note.UpdatedAt;
             await _context.SaveChangesAsync(cancellationToken);
+        }
+        else
+        {
+            throw new Exception("Note not found");
         }
     }
 
