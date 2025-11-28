@@ -61,7 +61,7 @@ namespace Todo.NoteController
             catch (Exception e)
             {
                 
-                return BadRequest(new ErrorResponse
+                return NotFound(new ErrorResponse
                 {
                     Message = e.Message
                 });
@@ -80,7 +80,7 @@ namespace Todo.NoteController
             catch (Exception e)
             {
                 
-                return BadRequest(new ErrorResponse
+                return NotFound(new ErrorResponse
                 {
                     Message = e.Message
                 });
@@ -103,7 +103,7 @@ namespace Todo.NoteController
             catch (Exception e)
             {
                 
-                return BadRequest(new ErrorResponse
+                return NotFound(new ErrorResponse
                 {
                     Message = e.Message
                 });
